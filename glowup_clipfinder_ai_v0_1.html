@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101323">
+<title>GlowUp ClipFinder AI</title>
+<style>
+:root{--bg:#0d1020;--panel:#171b2e;--panel2:#202640;--line:#303853;--text:#f5f6ff;--muted:#a8afc7;--purple:#9b7cff;--cyan:#65d9e8;--green:#63d6a0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#28204c 0,#0d1020 42%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:22px 16px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#a78bfa,#5b49c9);display:grid;place-items:center;font-weight:900;font-size:18px;box-shadow:0 8px 28px #8b5cf644}.brand strong{display:block;font-size:16px;letter-spacing:.2px}.brand small{color:var(--muted)}.pill{font-size:11px;color:#bff8dc;border:1px solid #34765c;background:#17382e;padding:5px 9px;border-radius:99px}
+.hero{margin-bottom:22px}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}.hero h1{font-size:clamp(29px,6vw,44px);line-height:1.08;margin:9px 0 10px;letter-spacing:-1.2px}.grad{background:linear-gradient(90deg,#c3adff,#73e1ed);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);max-width:620px;margin:0}
+.card{background:linear-gradient(180deg,#1a1f34,#15192a);border:1px solid var(--line);border-radius:20px;padding:18px;margin:16px 0;box-shadow:0 14px 40px #0002}.card h2{font-size:16px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;margin:0 0 15px}.field{display:flex;gap:9px}.field input{min-width:0;flex:1;background:#0f1425;border:1px solid #39415e;color:white;border-radius:12px;padding:14px;font-size:14px;outline:none}.field input:focus{border-color:var(--purple);box-shadow:0 0 0 3px #9b7cff22}.btn{border:0;border-radius:12px;background:linear-gradient(135deg,#a78bfa,#7057db);color:#fff;padding:13px 17px;font-weight:800;cursor:pointer}.btn:disabled{opacity:.5;cursor:not-allowed}.hint{color:#8f98b5;font-size:12px;margin-top:10px}.notice{display:flex;gap:10px;background:#2d281b;border:1px solid #65542c;color:#f4dfaa;border-radius:12px;padding:12px;font-size:12px;margin-top:14px}
+.results-head{display:flex;align-items:end;justify-content:space-between;gap:10px}.results-head h2{margin:0}.demo{font-size:10px;color:#ffdb8c;border:1px solid #755d2e;border-radius:99px;padding:4px 8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.clip{background:#111629;border:1px solid #303853;border-radius:15px;padding:14px;min-width:0}.cliptop{display:flex;justify-content:space-between;gap:8px;align-items:start}.clip h3{font-size:14px;line-height:1.3;margin:0 0 5px}.clip p{font-size:12px;color:var(--muted);margin:0}.score{font-size:20px;font-weight:900;color:var(--green);white-space:nowrap}.score small{display:block;font-size:9px;color:var(--muted);font-weight:600;text-align:right}.bar{height:6px;background:#303853;border-radius:10px;overflow:hidden;margin:12px 0}.bar span{display:block;height:100%;background:linear-gradient(90deg,#7e6bea,#65d9e8);border-radius:10px}.meta{display:flex;flex-wrap:wrap;gap:7px;color:#bdc5dd;font-size:11px}.tag{background:#252d46;padding:4px 7px;border-radius:7px}.edit{margin-top:12px;border-top:1px solid #2d3550;padding-top:11px}.edit label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}.edit input{width:100%;background:#0d1222;color:white;border:1px solid #39415e;border-radius:8px;padding:8px;font-size:12px}.editrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.smallbtn{width:100%;margin-top:10px;background:#28314c;color:#e8eaff;border:1px solid #414d70;border-radius:9px;padding:9px;font-weight:700;font-size:12px}
+.empty{padding:26px 10px;text-align:center;color:var(--muted);border:1px dashed #3b4564;border-radius:14px;margin-top:14px}.empty b{color:#e7e9f8;display:block;margin-bottom:5px}.footer{color:#79829e;font-size:11px;text-align:center;margin-top:25px}
+@media(max-width:650px){.field{flex-direction:column}.field .btn{width:100%}.grid{grid-template-columns:1fr}.card{padding:15px}.top{margin-bottom:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">GL</div><div><strong>GlowUp <span class="grad">ClipFinder AI</span></strong><small>Find the moment. Make it a clip.</small></div></div>
+    <span class="pill">● YouTube workflow</span>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">AI CLIP ASSISTANT</div>
+    <h1>Temukan <span class="grad">5 Golden Moments</span><br> dari video panjang.</h1>
+    <p>Tempel link YouTube untuk menyiapkan analisis momen, skor potensi, dan ruang edit sebelum klip diproduksi.</p>
+  </section>
+  <section class="card">
+    <h2>1. Masukkan video sumber</h2>
+    <p class="sub">Gunakan URL video YouTube yang dapat diakses publik.</p>
+    <div class="field">
+      <input id="url" type="url" placeholder="https://www.youtube.com/watch?v=..." aria-label="Link YouTube">
+      <button class="btn" id="analyze">Analisis video ↗</button>
+    </div>
+    <div class="hint">Mode: Analisis lalu edit · Target output: 5 klip · Format: 9:16</div>
+    <div class="notice"><span>ⓘ</span><span><b>Prototype tahap awal.</b> Saat ini halaman ini menyiapkan alur dan tampilan edit. Analisis AI sungguhan, transkrip, pemotongan video, dan ekspor MP4 memerlukan backend pemrosesan video yang akan kita sambungkan pada tahap berikutnya.</span></div>
+  </section>
+  <section class="card">
+    <div class="results-head"><div><h2>2. Hasil Golden Moments</h2><p class="sub" style="margin:4px 0 0">Lima kandidat klip untuk ditinjau dan diedit.</p></div><span class="demo">CONTOH UI</span></div>
+    <div id="empty" class="empty"><b>Belum ada video dianalisis</b>Tempel link YouTube di atas untuk melihat contoh alur hasil.</div>
+    <div id="results" class="grid" hidden>
+      <article class="clip"><div class="cliptop"><div><h3>01 · Hook yang mengejutkan</h3><p>Bagian pembuka yang memancing rasa penasaran.</p></div><div class="score">96<small>VIRAL SCORE</small></div></div><div class="bar"><span style="width:96%"></span></div><div class="meta"><span class="tag">00:02–00:38</span><span class="tag">36 detik</span><span class="tag">Hook kuat</span></div><div class="edit"><label>Judul klip</label><input value="Pernyataan yang bikin penasaran"><div class="editrow"><div><label>Mulai (detik)</label><input type="number" value="2"></div><div><label>Akhir (detik)</label><input type="number" value="38"></div></div><button class="smallbtn">Pilih untuk diedit ✓</button></div></article>
+      <article class="clip"><div class="cliptop"><div><h3>02 · Pendapat berani</h3><p>Pernyataan tegas yang memicu diskusi.</p></div><div class="score">92<small>VIRAL SCORE</small></div></div><div class="bar"><span style="width:92%"></span></div><div class="meta"><span class="tag">04:12–04:51</span><span class="tag">39 detik</span><span class="tag">Komentar</span></div><div class="edit"><label>Judul klip</label><input value="Berani beda pendapat"><div class="editrow"><div><label>Mulai (detik)</label><input type="number" value="252"></div><div><label>Akhir (detik)</label><input type="number" value="291"></div></div><button class="smallbtn">Pilih untuk diedit ✓</button></div></article>
+      <article class="clip"><div class="cliptop"><div><h3>03 · Cerita emosional</h3><p>Pengalaman personal yang membangun koneksi.</p></div><div class="score">89<small>VIRAL SCORE</small></div></div><div class="bar"><span style="width:89%"></span></div><div class="meta"><span class="tag">12:30–13:14</span><span class="tag">44 detik</span><span class="tag">Emosi</span></div><div class="edit"><label>Judul klip</label><input value="Cerita yang menyentuh"><div class="editrow"><div><label>Mulai (detik)</label><input type="number" value="750"></div><div><label>Akhir (detik)</label><input type="number" value="794"></div></div><button class="smallbtn">Pilih untuk diedit ✓</button></div></article>
+      <article class="clip"><div class="cliptop"><div><h3>04 · Tips praktis</h3><p>Informasi ringkas yang mudah diterapkan.</p></div><div class="score">85<small>VIRAL SCORE</small></div></div><div class="bar"><span style="width:85%"></span></div><div class="meta"><span class="tag">18:05–18:48</span><span class="tag">43 detik</span><span class="tag">Edukasi</span></div><div class="edit"><label>Judul klip</label><input value="Tips praktis yang berguna"><div class="editrow"><div><label>Mulai (detik)</label><input type="number" value="1085"></div><div><label>Akhir (detik)</label><input type="number" value="1128"></div></div><button class="smallbtn">Pilih untuk diedit ✓</button></div></article>
+      <article class="clip"><div class="cliptop"><div><h3>05 · Momen menghibur</h3><p>Bagian ringan yang berpotensi dibagikan.</p></div><div class="score">81<small>VIRAL SCORE</small></div></div><div class="bar"><span style="width:81%"></span></div><div class="meta"><span class="tag">25:40–26:18</span><span class="tag">38 detik</span><span class="tag">Hiburan</span></div><div class="edit"><label>Judul klip</label><input value="Momen paling menghibur"><div class="editrow"><div><label>Mulai (detik)</label><input type="number" value="1540"></div><div><label>Akhir (detik)</label><input type="number" value="1578"></div></div><button class="smallbtn">Pilih untuk diedit ✓</button></div></article>
+    </div>
+  </section>
+  <div class="footer">GlowUpLabs · ClipFinder AI · Prototype antarmuka v0.1</div>
+</div>
+<script>
+const url=document.getElementById('url'), analyze=document.getElementById('analyze'), empty=document.getElementById('empty'), results=document.getElementById('results');
+analyze.addEventListener('click',()=>{
+ const v=url.value.trim();
+ if(!v){alert('Tempel link YouTube terlebih dahulu.');url.focus();return;}
+ let u;try{u=new URL(v)}catch(e){alert('Link belum valid. Periksa kembali URL YouTube.');return;}
+ if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be','www.youtube-nocookie.com'].includes(u.hostname)){alert('Untuk versi awal, masukkan link YouTube.');return;}
+ alert('Link diterima untuk prototype. Hasil di bawah hanya contoh tampilan, bukan analisis video sungguhan. Integrasi AI dan pemrosesan video akan dibuat pada tahap backend.');
+ empty.hidden=true;results.hidden=false;
+});
+document.querySelectorAll('.smallbtn').forEach(b=>b.addEventListener('click',()=>{b.textContent='✓ Dipilih untuk diedit';b.style.borderColor='#63d6a0';}));
+</script>
+</body>
+</html>
