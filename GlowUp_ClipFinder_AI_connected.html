@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowUp ClipFinder AI</title>
+<style>
+:root{--bg:#0b1020;--panel:#141c31;--line:#283552;--text:#edf2ff;--muted:#9eabc6;--accent:#8b7cff;--accent2:#36d6b0;--danger:#ff7585}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#20244a 0,#0b1020 42%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:920px;margin:auto;padding:24px 16px 60px}.top{display:flex;align-items:center;gap:12px;margin-bottom:24px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#8b7cff,#36d6b0);display:grid;place-items:center;color:#0b1020;font-weight:900;font-size:19px}.eyebrow{color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:1.4px}.title{font-size:28px;font-weight:850;letter-spacing:-.8px;margin:2px 0}.sub{color:var(--muted);margin:0}.panel{background:rgba(20,28,49,.94);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;box-shadow:0 16px 45px #0003}.panel h2{font-size:17px;margin:0 0 14px}.field{margin:13px 0}label{display:block;font-weight:650;margin-bottom:7px}input{width:100%;padding:13px 14px;border:1px solid #344363;border-radius:11px;background:#0c1428;color:var(--text);font:inherit;outline:none}input:focus{border-color:var(--accent)}.hint{color:var(--muted);font-size:12px;margin-top:6px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button{border:0;border-radius:11px;padding:13px 18px;background:linear-gradient(100deg,#8b7cff,#6c8dff);color:white;font-weight:750;font-size:14px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.secondary{background:#273450}.status{margin-top:14px;padding:12px 14px;border-radius:10px;background:#0d172b;color:var(--muted);white-space:pre-wrap}.status.ok{border:1px solid #226e61;color:#9af0d9}.status.err{border:1px solid #713d50;color:#ffb5c0}.results{display:grid;gap:12px}.moment{border:1px solid var(--line);border-radius:14px;padding:15px;background:#10192d}.momenthead{display:flex;justify-content:space-between;gap:10px;align-items:start}.moment h3{font-size:16px;margin:0 0 7px}.score{white-space:nowrap;background:#26335b;color:#c9c2ff;border-radius:9px;padding:5px 9px;font-weight:800}.meta{color:var(--accent2);font-size:13px;font-weight:700}.reason{color:#c1cbe0;margin:8px 0 0}.foot{color:var(--muted);font-size:12px;margin-top:18px}.hidden{display:none!important}
+@media(max-width:560px){.title{font-size:24px}.panel{padding:16px}.momenthead{display:block}.score{display:inline-block;margin-top:8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div class="logo">GL</div><div><div class="eyebrow">GLOWUPLABS TOOL</div><div class="title">GlowUp ClipFinder AI</div><p class="sub">Temukan momen menarik untuk bahan YouTube Shorts.</p></div></header>
+
+  <section class="panel">
+    <h2>1. Pengaturan koneksi</h2>
+    <div class="field">
+      <label for="backend">Apps Script Web App URL</label>
+      <input id="backend" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="url">
+      <div class="hint">Tempel URL Web App yang berakhiran /exec. URL disimpan hanya di browser HP ini.</div>
+    </div>
+    <div class="field">
+      <label for="youtube">URL video YouTube publik</label>
+      <input id="youtube" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="url">
+      <div class="hint">Gunakan video publik yang kamu miliki atau punya izin untuk digunakan.</div>
+    </div>
+    <div class="actions"><button id="analyze">Analisis 5 Golden Moments</button><button class="secondary" id="test">Tes koneksi</button></div>
+    <div id="status" class="status" role="status">Siap. Masukkan URL backend dan URL YouTube.</div>
+  </section>
+
+  <section class="panel">
+    <h2>2. Hasil analisis</h2>
+    <div id="results" class="results"><p class="sub">Belum ada hasil. Jalankan analisis untuk melihat momen dan Viral Score.</p></div>
+    <p class="foot">Catatan: versi ini menampilkan rekomendasi momen dari AI. Pemotongan video dan ekspor MP4 9:16 belum tersedia.</p>
+  </section>
+  <p class="foot">GlowUp ClipFinder AI • Versi koneksi awal</p>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const backend = $("backend"), youtube = $("youtube"), statusBox = $("status"), results = $("results");
+backend.value = localStorage.getItem("glowup_backend_url") || "";
+backend.addEventListener("change", () => localStorage.setItem("glowup_backend_url", backend.value.trim()));
+
+function setStatus(message, kind="") { statusBox.textContent = message; statusBox.className = "status " + kind; }
+function validBackend() { return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(backend.value.trim()); }
+function jsonp(params, timeoutMs=180000) {
+  return new Promise((resolve,reject) => {
+    const callbackName = "glowupCallback_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+    const script = document.createElement("script");
+    const url = new URL(backend.value.trim());
+    Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
+    url.searchParams.set("callback", callbackName);
+    let finished = false;
+    const timer = setTimeout(() => done(new Error("Waktu tunggu habis. Periksa backend dan coba lagi.")), timeoutMs);
+    function done(err,data) {
+      if (finished) return; finished = true; clearTimeout(timer);
+      delete window[callbackName]; script.remove();
+      err ? reject(err) : resolve(data);
+    }
+    window[callbackName] = data => done(null,data);
+    script.onerror = () => done(new Error("Tidak bisa menghubungi Apps Script. Periksa URL /exec dan deployment."));
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+function renderMoments(data) {
+  let moments = data && (data.moments || data.results);
+  if (!Array.isArray(moments) && data && Array.isArray(data.output)) {
+    const textPart = data.output.find(x => x.type === "text" && x.text);
+    if (textPart) {
+      const match = textPart.text.match(/\{[\s\S]*\}/);
+      if (match) { try { moments = JSON.parse(match[0]).moments; } catch(e) {} }
+    }
+  }
+  if (!Array.isArray(moments)) throw new Error(data.error || "Respons diterima, tetapi daftar moments tidak ditemukan.");
+  results.innerHTML = "";
+  moments.slice(0,5).forEach((m,i) => {
+    const card = document.createElement("article"); card.className = "moment";
+    const head = document.createElement("div"); head.className = "momenthead";
+    const left = document.createElement("div");
+    const h = document.createElement("h3"); h.textContent = (i+1)+". "+(m.title || "Golden Moment");
+    const meta = document.createElement("div"); meta.className = "meta"; meta.textContent = (m.start || m.startTime || "--:--")+" – "+(m.end || m.endTime || "--:--");
+    left.append(h,meta);
+    const score = document.createElement("span"); score.className = "score"; score.textContent = "Viral Score: "+(m.viralScore ?? m.score ?? "—")+"/100";
+    head.append(left,score);
+    const reason = document.createElement("p"); reason.className = "reason"; reason.textContent = m.reason || m.description || "";
+    card.append(head,reason); results.appendChild(card);
+  });
+  if (!moments.length) throw new Error("AI tidak menemukan momen. Coba video publik lain.");
+}
+$("test").addEventListener("click", async () => {
+  if (!validBackend()) return setStatus("URL backend belum benar. Pastikan diawali https://script.google.com/macros/s/ dan berakhiran /exec.", "err");
+  $("test").disabled = true; setStatus("Menguji koneksi...");
+  try { const data = await jsonp({action:"ping"},30000); if (data.ok) setStatus("Koneksi backend berhasil. Siap menganalisis video.", "ok"); else throw new Error(data.error || "Backend belum merespons dengan benar."); }
+  catch(e) { setStatus(e.message, "err"); }
+  finally { $("test").disabled = false; }
+});
+$("analyze").addEventListener("click", async () => {
+  if (!validBackend()) return setStatus("Masukkan URL Apps Script Web App yang benar terlebih dahulu.", "err");
+  if (!youtube.value.trim()) return setStatus("Masukkan URL video YouTube terlebih dahulu.", "err");
+  if (!/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(youtube.value.trim())) return setStatus("URL harus berasal dari youtube.com atau youtu.be.", "err");
+  $("analyze").disabled = true; results.innerHTML = ""; setStatus("Sedang meminta Gemini menganalisis video. Ini bisa memerlukan beberapa menit...");
+  try { const data = await jsonp({action:"analyze",youtubeUrl:youtube.value.trim()},240000); if (data.error) throw new Error(data.error); renderMoments(data); setStatus("Analisis selesai. Periksa 5 momen yang ditemukan.", "ok"); }
+  catch(e) { setStatus(e.message, "err"); }
+  finally { $("analyze").disabled = false; }
+});
+</script>
+</body>
+</html>
