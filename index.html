@@ -94,7 +94,7 @@ function renderMoments(data) {
 $("test").addEventListener("click", async () => {
   if (!validBackend()) return setStatus("URL backend belum benar. Pastikan diawali https://script.google.com/macros/s/ dan berakhiran /exec.", "err");
   $("test").disabled = true; setStatus("Menguji koneksi...");
-  try { const data = await jsonp({action:"ping"},30000); if (data.ok) setStatus("Koneksi backend berhasil. Siap menganalisis video.", "ok"); else throw new Error(data.error || "Backend belum merespons dengan benar."); }
+  try { const data = await jsonp({action:"ping"},30000); if (data.success) setStatus("Koneksi backend berhasil. Siap menganalisis video.", "ok"); else throw new Error(data.error || "Backend belum merespons dengan benar."); }
   catch(e) { setStatus(e.message, "err"); }
   finally { $("test").disabled = false; }
 });
